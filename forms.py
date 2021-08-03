@@ -29,3 +29,10 @@ class LoginForm(FlaskForm):
 class CommentForm(FlaskForm):
     comment_text = CKEditorField("Comment", validators=[DataRequired()])
     submit = SubmitField("Submit Comment")
+
+
+class ImageUploadForm(FlaskForm):
+    category = StringField("Category", validators=[DataRequired()])
+    quote_text = StringField("Quote Text", validators=[DataRequired()])
+    image = StringField("Image Link", validators=[DataRequired()])
+    submit = SubmitField("Upload")

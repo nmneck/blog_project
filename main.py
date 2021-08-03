@@ -7,7 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
-from forms import LoginForm, RegisterForm, CreatePostForm, CommentForm
+from forms import LoginForm, RegisterForm, CreatePostForm, CommentForm, ImageUploadForm
 from flask_gravatar import Gravatar
 import os
 
@@ -65,6 +65,14 @@ class Comment(db.Model):
     text = db.Column(db.Text, nullable=False)
 
 
+class Images(db.Model):
+    __tablename__ = "images"
+    id = db.Column(db.Integer, primary_key=True)
+    category = db.Column(db.String(250), nullable=False)
+    quote_text = db.Column(db.String(250), nullable=False)
+    image = db.Column(db.String(250), nullable=False)
+
+
 db.create_all()
 
 
@@ -82,6 +90,40 @@ def admin_only(f):
 def get_all_posts():
     posts = BlogPost.query.all()
     return render_template("index.html", all_posts=posts, current_user=current_user)
+
+
+@app.route('/upload', methods=["GET", "POST"])
+def upload():
+    form = ImageUploadForm()
+
+    if form.validate_on_submit():
+        new_image = Images(
+            category=form.category,
+            quote_text=form.quote_text,
+            image=form.image
+        )
+        db.session.add(new_image)
+        db.session.commit()
+    return render_template("upload.html", form=form)
+
+
+@app.route('/images/<category>')
+def images(category):
+    all_images = Images.query.filter_by(category=category)
+    return jsonify(all_images)
+
+
+@app.route('/secrets')
+def secrets():
+    return jsonify(user={
+        "id": "1",
+        "name": "new_user.name",
+        "email": "new_user.email",
+        "password": "new_user.password",
+        "image": "https://github.com/nmneck/blog_project/blob/master/static/img/about-bg.jpg?raw=true"
+    })
+    # https: // github.com / nmneck / blog_project / blob / master / static / img / about - bg.jpg
+    # render_template("secrets.html")
 
 
 @app.route('/register', methods=["GET", "POST"])
@@ -111,19 +153,6 @@ def register():
         return redirect(url_for("get_all_posts"))
 
     return render_template("register.html", form=form, current_user=current_user)
-
-
-@app.route('/secrets')
-def secrets():
-    return jsonify(user={
-        "id": "1",
-        "name": "new_user.name",
-        "email": "new_user.email",
-        "password": "new_user.password",
-        "image": "https://github.com/nmneck/blog_project/blob/master/static/img/about-bg.jpg?raw=true"
-    })
-    # https: // github.com / nmneck / blog_project / blob / master / static / img / about - bg.jpg
-    # render_template("secrets.html")
 
 
 @app.route('/login', methods=["GET", "POST"])
