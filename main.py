@@ -12,13 +12,14 @@ from flask_gravatar import Gravatar
 import os
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') #8BYkEfBA6O6donzWlSihBXox7C0sKR6b
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')  # 8BYkEfBA6O6donzWlSihBXox7C0sKR6b
 ckeditor = CKEditor(app)
 Bootstrap(app)
-gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=False, force_lower=False, use_ssl=False, base_url=None)
+gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=False, force_lower=False, use_ssl=False,
+                    base_url=None)
 
 ##CONNECT TO DB
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL',  "sqlite:///blog.db")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', "sqlite:///blog.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 login_manager = LoginManager()
@@ -62,6 +63,8 @@ class Comment(db.Model):
     parent_post = relationship("BlogPost", back_populates="comments")
     comment_author = relationship("User", back_populates="comments")
     text = db.Column(db.Text, nullable=False)
+
+
 db.create_all()
 
 
@@ -71,6 +74,7 @@ def admin_only(f):
         if current_user.id != 1:
             return abort(403)
         return f(*args, **kwargs)
+
     return decorated_function
 
 
@@ -87,7 +91,7 @@ def register():
 
         if User.query.filter_by(email=form.email.data).first():
             print(User.query.filter_by(email=form.email.data).first())
-            #User already exists
+            # User already exists
             flash("You've already signed up with that email, log in instead!")
             return redirect(url_for('login'))
 
@@ -112,12 +116,14 @@ def register():
 @app.route('/secrets')
 def secrets():
     return jsonify(user={
-            "id": "1",
-            "name": "new_user.name",
-            "email": "new_user.email",
-            "password": "new_user.password"
-        })
-    #render_template("secrets.html")
+        "id": "1",
+        "name": "new_user.name",
+        "email": "new_user.email",
+        "password": "new_user.password",
+        "image": "static/img/about-bg.jpg"
+    })
+
+    # render_template("secrets.html")
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -196,8 +202,6 @@ def add_new_post():
         return redirect(url_for("get_all_posts"))
 
     return render_template("make-post.html", form=form, current_user=current_user)
-
-
 
 
 @app.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
