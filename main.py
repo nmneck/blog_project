@@ -120,9 +120,9 @@ def secrets():
         "name": "new_user.name",
         "email": "new_user.email",
         "password": "new_user.password",
-        "image": "static/img/about-bg.jpg"
+        "image": "https://github.com/nmneck/blog_project/blob/master/static/img/about-bg.jpg"
     })
-
+    # https: // github.com / nmneck / blog_project / blob / master / static / img / about - bg.jpg
     # render_template("secrets.html")
 
 
