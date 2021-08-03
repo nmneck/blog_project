@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, flash, abort
+from flask import Flask, render_template, redirect, url_for, flash, abort, jsonify
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
 from datetime import date
@@ -107,6 +107,17 @@ def register():
         return redirect(url_for("get_all_posts"))
 
     return render_template("register.html", form=form, current_user=current_user)
+
+
+@app.route('/secrets')
+def secrets():
+    return jsonify(user={
+            "id": "1",
+            "name": "new_user.name",
+            "email": "new_user.email",
+            "password": "new_user.password"
+        })
+    #render_template("secrets.html")
 
 
 @app.route('/login', methods=["GET", "POST"])
