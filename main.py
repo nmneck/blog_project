@@ -40,7 +40,7 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(100))
     posts = relationship("BlogPost", back_populates="author")
     comments = relationship("Comment", back_populates="comment_author")
-    images = relationship("Images")
+    images = relationship("Images", back_populates="images")
 
 
 class BlogPost(db.Model):
@@ -69,7 +69,7 @@ class Comment(db.Model):
 class Images(db.Model):
     __tablename__ = "images"
     id = db.Column(db.Integer, primary_key=True)
-    category = db.Column(db.String(250), nullable=False)
+    category = db.Column(db.String(250), db.foreignKey("users.images"), nullable=False)
     quote_text = db.Column(db.String(250), nullable=False)
     image = db.Column(db.String(250), nullable=False)
 
