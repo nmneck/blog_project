@@ -105,6 +105,7 @@ def upload():
         )
         db.session.add(new_image)
         db.session.commit()
+        return render_template("upload.html", form=form, current_user=current_user)
     return render_template("upload.html", form=form, current_user=current_user)
 
 
