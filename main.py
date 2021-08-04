@@ -69,7 +69,7 @@ class Comment(db.Model):
 class Images(db.Model):
     __tablename__ = "images"
     id = db.Column(db.Integer, primary_key=True)
-    category = db.Column(db.String(250), db.foreignKey("users.images"), nullable=False)
+    category = db.Column(db.String(250))
     quote_text = db.Column(db.String(250), nullable=False)
     image = db.Column(db.String(250), nullable=False)
 
