@@ -40,6 +40,7 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(100))
     posts = relationship("BlogPost", back_populates="author")
     comments = relationship("Comment", back_populates="comment_author")
+    images = relationship("Images")
 
 
 class BlogPost(db.Model):
