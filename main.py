@@ -176,10 +176,10 @@ def login():
     return render_template("login.html", form=form, current_user=current_user)
 
 
-# @app.route('/logout')
-# def logout():
-#     logout_user()
-#     return redirect(url_for('get_all_posts'))
+@app.route('/logout')
+def logout():
+    # logout_user()
+    return redirect(url_for('get_all_posts'))
 
 
 # @app.route("/post/<int:post_id>", methods=["GET", "POST"])
@@ -202,16 +202,16 @@ def login():
 #
 #     return render_template("post.html", post=requested_post, form=form, current_user=current_user)
 
-#
-# @app.route("/about")
-# def about():
-#     return render_template("about.html", current_user=current_user)
-#
-#
-# @app.route("/contact")
-# def contact():
-#     return render_template("contact.html", current_user=current_user)
-#
+
+@app.route("/about")
+def about():
+    return render_template("about.html", current_user=current_user)
+
+
+@app.route("/contact")
+def contact():
+    return render_template("contact.html", current_user=current_user)
+
 #
 # @app.route("/new-post", methods=["GET", "POST"])
 # @admin_only
@@ -255,13 +255,13 @@ def login():
 #     return render_template("make-post.html", form=edit_form, is_edit=True, current_user=current_user)
 
 #
-# @app.route("/delete/<int:post_id>")
+@app.route("/delete/<int:post_id>")
 # @admin_only
-# def delete_post(post_id):
-#     post_to_delete = BlogPost.query.get(post_id)
-#     db.session.delete(post_to_delete)
-#     db.session.commit()
-#     return redirect(url_for('get_all_posts'))
+def delete_post(post_id):
+    post_to_delete = BlogPost.query.get(post_id)
+    db.session.delete(post_to_delete)
+    db.session.commit()
+    return redirect(url_for('get_all_posts'))
 
 
 if __name__ == "__main__":
